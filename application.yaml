@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   source:
-    path: ArgoCD/kustomize-argocd
+    path: argocd
     repoURL: https://github.com/ludovici96/devops.git
     targetRevision: HEAD
   project: default
