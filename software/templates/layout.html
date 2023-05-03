@@ -1,0 +1,87 @@
+
+<html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.united.css') }}">
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+<title>Flask Example</title>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Flask Example</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('FUN_root') }}">Home</a></li>
+            <li><a href="{{ url_for('FUN_public') }}">Public</a></li>
+            {% if session.get("current_user", None) != None %}
+	       <li><a href="{{ url_for('FUN_private') }}">Private</a></li>
+	    {% endif%}
+            {% if session.get("current_user", None) == "ADMIN" %}
+	      <li><a href="{{ url_for('FUN_admin') }}">Admin Dashboard</a></li>
+	    {% endif %}
+        </ul>
+        
+        <ul class="nav navbar-nav navbar-right">
+        {% if session.get("current_user", None) == None %}
+                <form action="/login" method="post" class="navbar-form navbar-right">
+                    <div class="form-group">
+                      <input type="text" name="id" placeholder="User Name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" name="pw" placeholder="Password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">Log In</button>
+                </form>
+        {% else %}
+        <li>
+              <a><b>{{ session.get("current_user") }}</b></a></li>
+              <li><a href="{{ url_for('FUN_logout') }}"><b><u>Logout</u></b></a>
+          </li>
+        {% endif %}
+        </ul>
+        </div>
+                        
+    </div>
+    </nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+<div class="container">
+  
+  <h1>{% block page_title %}{% endblock %}</h1>
+  
+  <p>{% block body %}{% endblock %}</p>
+
+</div>
+
+
+<div class='container'>
+<hr>
+Developed by <a href='https://github.com/XD-DENG'>XD-DENG</a>
+<a href="http://flask.pocoo.org/"><img
+   src="{{ url_for('static', filename='img/flask-powered.png') }}"
+   border="0"
+   align="right"
+   alt="Flask powered"
+   title="Flask powered"></a>
+</div>
+
+
+</html>
