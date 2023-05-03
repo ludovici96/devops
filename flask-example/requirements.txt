@@ -2,3 +2,5 @@ Flask
 Werkzeug
 markupsafe
 Jinja2
+Flask-SQLAlchemy
+psycopg2-binary
