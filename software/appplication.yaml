@@ -2,10 +2,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: devops
-  namespace: argocd
+  namespace: nettside
 spec:
   source:
-    path: software
+    path: software/kustomize
     repoURL: https://github.com/ludovici96/devops.git
     targetRevision: HEAD
   project: default
