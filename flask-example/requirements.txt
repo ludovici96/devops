@@ -1,4 +1,0 @@
-Flask
-Werkzeug
-markupsafe
-Jinja2
