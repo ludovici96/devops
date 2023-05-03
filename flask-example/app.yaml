@@ -1,0 +1,99 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-data
+spec:
+  storageClassName: openebs-hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: website
+  template:
+    metadata:
+      labels:
+        app: website
+    spec:
+      containers:
+      - name: website
+        image: alisi18/devops:test-dev
+        ports:
+        - containerPort: 5000
+        - containerPort: 5001
+        env:
+        - name: DATABASE_HOST
+          value: "db"
+        - name: DATABASE_NAME
+          value: "postgres"
+        - name: DATABASE_USER
+          value: "postgres"
+        - name: DATABASE_PASSWORD
+          value: "cGFzc3dvcmQxMjM="
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: db
+        image: postgres
+        env:
+        - name: POSTGRES_PASSWORD
+          value: "cGFzc3dvcmQxMjM="
+        volumeMounts:
+        - mountPath: "/var/lib/postgresql/data"
+          name: db-data
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: db-data
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  selector:
+    app: db
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: website-service
+spec:
+  selector:
+    app: website
+  ports:
+  - name: http
+    port: 80
+    targetPort: 5000
+    nodePort: 30000 # Change this port to the desired NodePort value
+  type: NodePort
