@@ -1,8 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: devops
-  namespace: nettside
+  name: website
+  namespace: argocd
 spec:
   source:
     path: software/kustomize
@@ -11,7 +11,7 @@ spec:
   project: default
   destination: 
     server: https://kubernetes.default.svc
-    namespace: nettside
+    namespace: argocd
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
