@@ -160,5 +160,29 @@ def delete_image_from_db(image_uid):
     _conn.commit()
     _conn.close()
 
+def setup_tables():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id TEXT PRIMARY KEY,
+            password TEXT NOT NULL
+        );
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS notes (
+            id SERIAL PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            content TEXT,
+            FOREIGN KEY (user_id) REFERENCES users (id)
+        );
+    ''')
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
 if __name__ == "__main__":
     print(list_users())

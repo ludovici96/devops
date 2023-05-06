@@ -1,8 +1,11 @@
 import pytest
 from app import app
-from database import list_users, verify, add_user, delete_user_from_db, write_note_into_db, read_note_from_db, delete_note_from_db
+from database import list_users, verify, add_user, delete_user_from_db, write_note_into_db, read_note_from_db, delete_note_from_db, setup_tables
 
-@pytest.fixture
+@pytest.fixture(scope='session', autouse=True)
+def setup_db():
+    setup_tables()
+
 def client():
     app.config['TESTING'] = True
     with app.test_client() as client:
@@ -55,3 +58,4 @@ def test_note_operations(client):
 
     client.get('/logout', follow_redirects=True)
     delete_user_from_db(test_id)
+
