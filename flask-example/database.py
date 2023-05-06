@@ -100,7 +100,7 @@ def write_note_into_db(id, note_to_write):
 
     current_timestamp = str(datetime.datetime.now())
     note_id = hashlib.sha1((id.upper() + current_timestamp).encode()).hexdigest()
-    _c.execute("INSERT INTO notes (user, timestamp, note, note_id) VALUES (%s, %s, %s, %s)", (id.upper(), current_timestamp, note_to_write, note_id))
+    _c.execute("INSERT INTO notes (user_id, timestamp, note, note_id) VALUES (%s, %s, %s, %s)", (id.upper(), current_timestamp, note_to_write, note_id))
 
     _conn.commit()
     _conn.close()
