@@ -180,9 +180,19 @@ def setup_tables():
         );
     ''')
 
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS images (
+            id SERIAL PRIMARY KEY,
+            owner TEXT NOT NULL,
+            image_url TEXT NOT NULL,
+            FOREIGN KEY (owner) REFERENCES users (id)
+        );
+    ''')
+
     conn.commit()
     cursor.close()
     conn.close()
+
 
 if __name__ == "__main__":
     print(list_users())
