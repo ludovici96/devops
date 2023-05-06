@@ -178,7 +178,7 @@ def setup_tables():
         user_id text,
         note_timestamp timestamp,
         note text,
-        note_id uuid
+        note_id text
     );
     """)
 
