@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: website
-        image: alisi18/flask-example:1
+        image: alisi18/flask-example:latest
         ports:
         - containerPort: 5000
         - containerPort: 5001
