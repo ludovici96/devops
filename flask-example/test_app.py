@@ -16,6 +16,14 @@ def client():
     with app.test_client() as client:
         yield client
 
+@pytest.fixture
+def test_user():
+    test_id = "TEST_USER"
+    test_pw = "test_password"
+    add_user(test_id, test_pw)
+    yield test_id, test_pw
+    delete_user_from_db(test_id)
+
 @pytest.mark.order(1)
 def test_root(client):
     response = client.get('/')
@@ -32,11 +40,8 @@ def test_admin_unauthorized(client):
     assert response.status_code == 401
 
 @pytest.mark.order(4)
-def test_login_logout(client):
-    test_id = "TEST_USER"
-    test_pw = "test_password"
-
-    add_user(test_id, test_pw)
+def test_login_logout(client, test_user):
+    test_id, test_pw = test_user
 
     response = client.post('/login', data=dict(id=test_id, pw=test_pw), follow_redirects=True)
     assert b"You can take notes here" in response.data  # Updated assertion
@@ -44,15 +49,10 @@ def test_login_logout(client):
     response = client.get('/logout', follow_redirects=True)
     assert b"Welcome!" in response.data
 
-    delete_user_from_db(test_id)
-
 @pytest.mark.order(5)
-def test_note_operations(client):
-    test_id = "TEST_USER"
-    test_pw = "test_password"
+def test_note_operations(client, test_user):
+    test_id, test_pw = test_user
     test_note = "This is a test note."
-
-    add_user(test_id, test_pw)
 
     client.post('/login', data=dict(id=test_id, pw=test_pw), follow_redirects=True)
 
@@ -67,4 +67,3 @@ def test_note_operations(client):
     assert len(notes) == 0
 
     client.get('/logout', follow_redirects=True)
-    delete_user_from_db(test_id)
