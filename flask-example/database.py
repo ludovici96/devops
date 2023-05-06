@@ -99,10 +99,12 @@ def write_note_into_db(id, note_to_write):
     _c = _conn.cursor()
 
     current_timestamp = str(datetime.datetime.now())
-    _c.execute("INSERT INTO notes values(%s, %s, %s, %s)", (id.upper(), current_timestamp, note_to_write, hashlib.sha1((id.upper() + current_timestamp).encode()).hexdigest()))
+    note_id = hashlib.sha1((id.upper() + current_timestamp).encode()).hexdigest()
+    _c.execute("INSERT INTO notes (user, timestamp, note, note_id) VALUES (%s, %s, %s, %s)", (id.upper(), current_timestamp, note_to_write, note_id))
 
     _conn.commit()
     _conn.close()
+
 
 def delete_note_from_db(note_id):
     _conn = get_db_connection()
