@@ -144,13 +144,20 @@ def FUN_delete_image(image_uid):
 
 
 
-@app.route("/login", methods = ["POST"])
-def FUN_login():
-    id_submitted = request.form.get("id").upper()
-    if (id_submitted in list_users()) and verify(id_submitted, request.form.get("pw")):
-        session['current_user'] = id_submitted
-    
-    return(redirect(url_for("FUN_root")))
+@app.route('/login/', methods=['GET', 'POST'])
+def login():
+    # ...
+    if request.method == 'POST':
+        id = request.form['id']
+        pw = request.form['pw']
+        if id == '' or pw == '':
+            error = 'Invalid input'
+        else:
+            if database.validate_login(id, pw):
+                session['user'] = id
+                return redirect('/private/')  # Change this line
+            else:
+                error = 'Invalid login'
 
 @app.route("/logout/")
 def FUN_logout():
