@@ -193,7 +193,6 @@ def setup_tables():
 
     _conn.commit()
     _conn.close()
-    conn.close()
 
 
 if __name__ == "__main__":
