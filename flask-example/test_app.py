@@ -2,6 +2,8 @@ import pytest
 from app import app
 from database import list_users, verify, add_user, delete_user_from_db, write_note_into_db, read_note_from_db, delete_note_from_db, setup_tables
 
+pytest_plugins = ["pytest_ordering"]
+
 @pytest.fixture(scope='session', autouse=True)
 def setup_db():
     setup_tables()
@@ -12,18 +14,22 @@ def client():
     with app.test_client() as client:
         yield client
 
+@pytest.mark.order(1)
 def test_root(client):
     response = client.get('/')
     assert response.status_code == 200
 
+@pytest.mark.order(2)
 def test_public(client):
     response = client.get('/public/')
     assert response.status_code == 200
 
+@pytest.mark.order(3)
 def test_admin_unauthorized(client):
     response = client.get('/admin/')
     assert response.status_code == 401
 
+@pytest.mark.order(4)
 def test_login_logout(client):
     test_id = "TEST_USER"
     test_pw = "test_password"
@@ -38,6 +44,7 @@ def test_login_logout(client):
 
     delete_user_from_db(test_id)
 
+@pytest.mark.order(5)
 def test_note_operations(client):
     test_id = "TEST_USER"
     test_pw = "test_password"
@@ -59,4 +66,3 @@ def test_note_operations(client):
 
     client.get('/logout', follow_redirects=True)
     delete_user_from_db(test_id)
-

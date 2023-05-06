@@ -29,7 +29,7 @@ def verify(id, pw):
     _conn = get_db_connection()
     _c = _conn.cursor()
 
-    _c.execute("SELECT pw FROM users WHERE id = %s", (id,))
+    _c.execute("SELECT password FROM users WHERE id = %s", (id.upper(),))
     result = _c.fetchone()[0] == hashlib.sha256(pw.encode()).hexdigest()
     
     _conn.close()
