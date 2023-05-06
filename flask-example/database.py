@@ -72,7 +72,7 @@ def read_note_from_db(id):
     _conn = get_db_connection()
     _c = _conn.cursor()
 
-    command = "SELECT note_id, timestamp, note FROM notes WHERE user = %s" 
+    command = "SELECT note_id, note_timestamp, note FROM notes WHERE user_id = %s"
     _c.execute(command, (id.upper(),))
     result = _c.fetchall()
 
@@ -184,10 +184,10 @@ def setup_tables():
 
     _c.execute("""
     CREATE TABLE IF NOT EXISTS images (
-        user_id text,
-        timestamp timestamp,
-        image_name text,
-        image_id uuid
+        uid uuid PRIMARY KEY,
+        owner text,
+        name text,
+        timestamp timestamp
     );
     """)
 

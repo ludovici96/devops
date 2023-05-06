@@ -45,9 +45,10 @@ def test_login_logout(client, test_user):
     test_id, test_pw = test_user
 
     response = client.post('/login', data=dict(id=test_id, pw=test_pw), follow_redirects=True)
+    print(response.data)  # Add this line to print the response data
     soup = BeautifulSoup(response.data, 'html.parser')
     h4_text = soup.find('h4').text.strip()
-    assert h4_text == "You can take notes here"  # Updated assertion
+    assert h4_text == "You can take notes here"
 
     response = client.get('/logout', follow_redirects=True)
     assert b"Welcome!" in response.data
