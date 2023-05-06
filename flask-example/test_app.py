@@ -1,6 +1,8 @@
 import pytest
+import datetime
+import hashlib
 from app import app
-from database import list_users, verify, add_user, delete_user_from_db, write_note_into_db, read_note_from_db, delete_note_from_db, setup_tables
+from database import get_db_connection, list_users, verify, add_user, delete_user_from_db, write_note_into_db, read_note_from_db, delete_note_from_db, setup_tables
 
 pytest_plugins = ["pytest_ordering"]
 
@@ -59,7 +61,7 @@ def test_note_operations(client):
     assert len(notes) == 1
     assert notes[0][2] == test_note
 
-    note_id = notes[0][3]
+    note_id = notes[0][0]
     delete_note_from_db(note_id)
     notes = read_note_from_db(test_id)
     assert len(notes) == 0
