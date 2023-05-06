@@ -6,3 +6,4 @@ Flask-SQLAlchemy
 psycopg2-binary
 pytest
 pytest-flask
+pytest-ordering
