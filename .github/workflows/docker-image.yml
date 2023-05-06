@@ -44,5 +44,5 @@ jobs:
         context: ./flask-example
         push: true
         tags: |
-          alisi18/flask-example:latest
           alisi18/flask-example:${{ steps.semantic_version.outputs.version }}
+          alisi18/flask-example:latest
