@@ -22,9 +22,13 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
+    - name: Get commit count
+      id: commit_count
+      run: echo "::set-output name=count::$(git rev-list --count HEAD)"
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
         context: ./flask-example
         push: true
-        tags: alisi18/flask-example:latest
+        tags: alisi18/flask-example:${{ steps.commit_count.outputs.count }}
