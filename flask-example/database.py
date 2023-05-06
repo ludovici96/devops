@@ -163,36 +163,36 @@ def delete_image_from_db(image_uid):
     _conn.close()
 
 def setup_tables():
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    _conn = get_db_connection()
+    _c = _conn.cursor()
 
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id TEXT PRIMARY KEY,
-            password TEXT NOT NULL
-        );
-    ''')
+    _c.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id text PRIMARY KEY,
+        password text
+    );
+    """)
 
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS notes (
-            id SERIAL PRIMARY KEY,
-            user_id TEXT NOT NULL,
-            content TEXT,
-            FOREIGN KEY (user_id) REFERENCES users (id)
-        );
-    ''')
+    _c.execute("""
+    CREATE TABLE IF NOT EXISTS notes (
+        user_id text,
+        note_timestamp timestamp,
+        note text,
+        note_id uuid
+    );
+    """)
 
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS images (
-            id SERIAL PRIMARY KEY,
-            owner TEXT NOT NULL,
-            image_url TEXT NOT NULL,
-            FOREIGN KEY (owner) REFERENCES users (id)
-        );
-    ''')
+    _c.execute("""
+    CREATE TABLE IF NOT EXISTS images (
+        user_id text,
+        timestamp timestamp,
+        image_name text,
+        image_id uuid
+    );
+    """)
 
-    conn.commit()
-    cursor.close()
+    _conn.commit()
+    _conn.close()
     conn.close()
 
 
