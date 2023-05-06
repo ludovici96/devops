@@ -3,6 +3,7 @@ import datetime
 import hashlib
 from app import app
 from database import get_db_connection, list_users, verify, add_user, delete_user_from_db, write_note_into_db, read_note_from_db, delete_note_from_db, setup_tables
+from bs4 import BeautifulSoup
 
 pytest_plugins = ["pytest_ordering"]
 
@@ -44,7 +45,9 @@ def test_login_logout(client, test_user):
     test_id, test_pw = test_user
 
     response = client.post('/login', data=dict(id=test_id, pw=test_pw), follow_redirects=True)
-    assert b"You can take notes here" in response.data  # Updated assertion
+    soup = BeautifulSoup(response.data, 'html.parser')
+    h4_text = soup.find('h4').text.strip()
+    assert h4_text == "You can take notes here"  # Updated assertion
 
     response = client.get('/logout', follow_redirects=True)
     assert b"Welcome!" in response.data
