@@ -36,6 +36,19 @@ def verify(id, pw):
 
     return result
 
+def validate_login(id, pw):
+    _conn = get_db_connection()
+    _c = _conn.cursor()
+
+    _c.execute("SELECT password FROM users WHERE id = %s", (id.upper(),))
+    result = _c.fetchone()
+
+    _conn.close()
+
+    if result is None:
+        return False
+    return result[0] == hashlib.sha256(pw.encode()).hexdigest()
+
 def delete_user_from_db(id):
     _conn = get_db_connection()
     _c = _conn.cursor()
