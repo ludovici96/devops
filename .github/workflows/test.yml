@@ -25,7 +25,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest pytest-flask
+      working-directory: flask-example
 
     - name: Run tests
       run: |
         pytest test_app.py
+      working-directory: flask-example
