@@ -6,6 +6,7 @@ from database import list_users, verify, add_user, delete_user_from_db, write_no
 def setup_db():
     setup_tables()
 
+@pytest.fixture
 def client():
     app.config['TESTING'] = True
     with app.test_client() as client:
