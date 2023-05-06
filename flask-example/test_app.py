@@ -14,6 +14,17 @@ def client():
     with app.test_client() as client:
         yield client
 
+def add_test_user():
+    test_id = "TEST_USER"
+    test_pw = "test_password"
+    
+    # Delete the test user if it exists
+    delete_user_from_db(test_id)
+
+    # Add the test user
+    add_user(test_id, test_pw)
+    return test_id, test_pw
+
 @pytest.mark.order(1)
 def test_root(client):
     response = client.get('/')
@@ -31,10 +42,7 @@ def test_admin_unauthorized(client):
 
 @pytest.mark.order(4)
 def test_login_logout(client):
-    test_id = "TEST_USER"
-    test_pw = "test_password"
-
-    add_user(test_id, test_pw)
+    test_id, test_pw = add_test_user()
 
     response = client.post('/login', data=dict(id=test_id, pw=test_pw), follow_redirects=True)
     assert b"Private Page" in response.data
@@ -46,14 +54,11 @@ def test_login_logout(client):
 
 @pytest.mark.order(5)
 def test_note_operations(client):
-    test_id = "TEST_USER"
-    test_pw = "test_password"
-    test_note = "This is a test note."
-
-    add_user(test_id, test_pw)
+    test_id, test_pw = add_test_user()
 
     client.post('/login', data=dict(id=test_id, pw=test_pw), follow_redirects=True)
 
+    test_note = "This is a test note."
     write_note_into_db(test_id, test_note)
     notes = read_note_from_db(test_id)
     assert len(notes) == 1
