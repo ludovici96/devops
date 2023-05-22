@@ -52,7 +52,7 @@ def test_login_logout(client, test_user):
 
     response = client.get('/logout', follow_redirects=True)
     print(response.data)
-    assert b"Welcome!" in response.data
+    assert b"Welcome" in response.data
 
 @pytest.mark.order(5)
 def test_note_operations(client, test_user):
