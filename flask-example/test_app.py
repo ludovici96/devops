@@ -48,7 +48,7 @@ def test_login_logout(client, test_user):
     print(response.data)  # Add this line to print the response data
     soup = BeautifulSoup(response.data, 'html.parser')
     h4_text = soup.find('h4').text.strip()
-    assert h4_text == "You can take notes here"
+    assert h4_text == 'You can take notes here. Only yourself can access them. They will be removed when your account is removed.'
 
     response = client.get('/logout', follow_redirects=True)
     assert b"Welcome!" in response.data
