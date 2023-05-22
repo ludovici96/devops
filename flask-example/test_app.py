@@ -51,6 +51,7 @@ def test_login_logout(client, test_user):
     assert h4_text == 'You can take notes here. Only yourself can access them. They will be removed when your account is removed.'
 
     response = client.get('/logout', follow_redirects=True)
+    print(response.data)
     assert b"Welcome!" in response.data
 
 @pytest.mark.order(5)
