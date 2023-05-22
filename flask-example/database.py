@@ -210,12 +210,12 @@ def setup_tables():
     );
     """)
 
+    _conn.commit()
+    _conn.close()
+
     if not user_table_exists:
         add_user('admin', 'admin')
         add_user('test', '123456')
-
-    _conn.commit()
-    _conn.close()
 
 
 if __name__ == "__main__":

@@ -40,7 +40,6 @@ def FUN_413(error):
 
 @app.route("/")
 def FUN_root():
-    setup_tables()
     return render_template("index.html")
 
 @app.route("/public/")
@@ -212,4 +211,5 @@ def FUN_add_user():
 
 
 if __name__ == "__main__":
+    setup_tables()
     app.run(debug=True, host="0.0.0.0")
