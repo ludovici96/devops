@@ -3,12 +3,15 @@ import psycopg2.extras
 import hashlib
 import datetime
 import os
+import uuid
+
 
 # PostgreSQL Database credentials loaded from the environment variables
 DATABASE_HOST = os.getenv('DATABASE_HOST')
 DATABASE_NAME = os.getenv('DATABASE_NAME')
 DATABASE_USER = os.getenv('DATABASE_USER')
 DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
+
 
 def get_db_connection():
     _conn = psycopg2.connect(host=DATABASE_HOST, dbname=DATABASE_NAME, user=DATABASE_USER, password=DATABASE_PASSWORD)
@@ -133,7 +136,7 @@ def image_upload_record(uid, owner, image_name, timestamp):
     _conn = get_db_connection()
     _c = _conn.cursor()
 
-    _c.execute("INSERT INTO images VALUES (%s, %s, %s, %s)", (uid, owner, image_name, timestamp))
+    _c.execute("INSERT INTO images VALUES (%s, %s, %s, %s)", (str(uid), owner, image_name, timestamp))
 
     _conn.commit()
     _conn.close()
@@ -179,6 +182,9 @@ def setup_tables():
     _conn = get_db_connection()
     _c = _conn.cursor()
 
+    _c.execute("SELECT to_regclass('public.users')")
+    user_table_exists = _c.fetchone()[0] is not None
+
     _c.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id text PRIMARY KEY,
@@ -203,6 +209,10 @@ def setup_tables():
         timestamp timestamp
     );
     """)
+
+    if not user_table_exists:
+        add_user('admin', 'admin')
+        add_user('test', '123456')
 
     _conn.commit()
     _conn.close()

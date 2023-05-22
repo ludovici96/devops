@@ -4,9 +4,9 @@ import hashlib
 from flask import Flask, session, url_for, redirect, render_template, request, abort, flash
 from database import list_users, verify, delete_user_from_db, add_user, validate_login
 from database import read_note_from_db, write_note_into_db, delete_note_from_db, match_user_id_with_note_id
-from database import image_upload_record, list_images_for_user, match_user_id_with_image_uid, delete_image_from_db
+from database import image_upload_record, list_images_for_user, match_user_id_with_image_uid, delete_image_from_db, setup_tables
 from werkzeug.utils import secure_filename
-
+import uuid
 
 
 app = Flask(__name__)
@@ -40,6 +40,7 @@ def FUN_413(error):
 
 @app.route("/")
 def FUN_root():
+    setup_tables()
     return render_template("index.html")
 
 @app.route("/public/")
@@ -118,9 +119,9 @@ def FUN_upload_image():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             upload_time = str(datetime.datetime.now())
-            image_uid = hashlib.sha1((upload_time + filename).encode()).hexdigest()
+            image_uid = uuid.uuid4()  # use uuid4 to generate a random UUID
             # Save the image into UPLOAD_FOLDER
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], image_uid + "-" + filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], str(image_uid) + "-" + filename))
             # Record this uploading in database
             image_upload_record(image_uid, session['current_user'], filename, upload_time)
             return(redirect(url_for("FUN_private")))
@@ -151,13 +152,16 @@ def login():
         id = request.form['id']
         pw = request.form['pw']
         if id == '' or pw == '':
-            error = 'Invalid input'
+            error = 'No input'
+            return FUN_401(error)
         else:
-            if database.validate_login(id, pw):
-                session['user'] = id
-                return redirect('/private/')  # Change this line
+            if validate_login(id, pw):
+                session['current_user'] = id.upper()
+                return redirect('/private/')
             else:
-                error = 'Invalid login'
+                error = 'Wrong username/password'
+                return FUN_401(error)
+
 
 @app.route("/logout/")
 def FUN_logout():
