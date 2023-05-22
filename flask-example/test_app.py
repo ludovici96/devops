@@ -19,8 +19,8 @@ def client():
 
 @pytest.fixture
 def test_user():
-    test_id = "test"
-    test_pw = "123456"
+    test_id = "TEST_USER"
+    test_pw = "test_password"
     add_user(test_id, test_pw)
     yield test_id, test_pw
     delete_user_from_db(test_id)
