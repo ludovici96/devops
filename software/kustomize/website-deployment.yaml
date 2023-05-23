@@ -56,5 +56,5 @@ spec:
   - name: http
     port: 80
     targetPort: 5000
-    nodePort: 30001 # Change this port to the desired NodePort value
+    nodePort: 30002 # Change this port to the desired NodePort value
   type: NodePort
