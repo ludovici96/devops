@@ -29,8 +29,6 @@ For more basic knowledge of Flask, you can refer to [a tutorial on Tutorialspoin
 
 - Step 3: Go to this app's directory and run `python app.py`
 
-
-
 ## Details about This Toy App
 
 There are three tabs in this toy app
@@ -41,10 +39,7 @@ There are three tabs in this toy app
 
 - **Admin Page**: This part is only open to the user who logged in as "Admin". In this tab, the administrator can manage accounts (list, delete, or add).
 
-
 A few accounts were set for testing, like ***admin*** (password: admin), ***test*** (password: 123456), etc. You can also delete or add accounts after you log in as ***admin***.
-
-
 
 ## References
 
@@ -52,9 +47,7 @@ A few accounts were set for testing, like ***admin*** (password: admin), ***test
 
 - https://www.tutorialspoint.com/flask/
 
-
-
-## Credict
+## Credit
 Image private.jpg: https://commons.wikimedia.org/wiki/File:(315-365)_Locked_(6149414678).jpg
 
 Image public.jpg: https://commons.wikimedia.org/wiki/File:Drown%3F!_(131380682).jpg
