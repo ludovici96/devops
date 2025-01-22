@@ -28,3 +28,4 @@ See detailed instructions in the [flask-example README](./flask-example/README.m
 - SQLite
 - Bootstrap
 - HTML/CSS
+- Kubernetes
