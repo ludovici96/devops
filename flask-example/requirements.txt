@@ -1,0 +1,10 @@
+Flask
+Werkzeug
+markupsafe
+Jinja2
+Flask-SQLAlchemy
+psycopg2-binary
+pytest
+pytest-flask
+pytest-ordering
+bs4
